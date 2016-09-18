@@ -1,38 +1,38 @@
+# This is Git's per-user configuration file.
 [user]
-	name = Dylan Gattey
-	email = dylan.gattey@gmail.com
+# Please adapt and uncomment the following lines:
+    name = Dylan Gattey
+    email = dgattey@linkedin.com
 [core]
-	quotepath = false
-	excludesfile = /Users/dgattey/.gitignore
-	attributesfile = ~/.gitattributes
-	editor = vim
+    excludesfile = /Users/dgattey/.gitignore_global
+    attributesfile = ~/.gitattributes
+    editor = vim
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+    cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+    path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+    cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+    trustExitCode = true
 [push]
-	default = simple
+    default = simple
 [credential]
-	helper = osxkeychain
+    helper = osxkeychain
 [filter "media"]
-	required = true
-	clean = git media clean %f
-	smudge = git media smudge %f
+    required = true
+    clean = git media clean %f
+    smudge = git media smudge %f
 [color]
-	ui = true
-	branch = auto
-	diff = auto
-	interactive = auto
-	status = auto
+    ui = true
+    branch = auto
+    diff = auto
+    interactive = auto
+    status = auto
 [alias]
     lol = log --oneline --graph --decorate
-    loa = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(bold blue)%h%C(reset) - %C(yellow)(%ar)%C(reset) %C(white)%s%C(reset) %C(green)- %an%C(reset)%C(bold red)%d%C(reset)' --all
-    ls = log --pretty=format:\"%C(red)%cr%C(blue) %h %C(reset)%an %Cgreen%d%x09%Cblue%s %C(yellow)(%ad)\" --abbrev-commit --decorate=short --date=local
+    ls = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) %C(bold blue)(%ar)%C(reset)%C(bold red)%d%C(reset) %C(white)%s%C(reset) %C(green)[%an]%C(reset)' --all
 [filter "lfs"]
-	clean = git lfs clean %f
-	smudge = git lfs smudge %f
-	required = true
+    clean = git lfs clean %f
+    smudge = git lfs smudge %f
+    required = true
 [commit]
-	template = /Users/dgattey/.stCommitMsg
+    template = /Users/dgattey/.stCommitMsg
