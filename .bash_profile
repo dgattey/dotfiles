@@ -4,7 +4,6 @@
 # PATH manipulations and exported paths
 export PATH=/usr/local/bin:$PATH
 export PATH=/usr/local/sbin:$PATH
-export PATH=/Users/dgattey/.brew/bin:$PATH # custom brew folder
 export PATH=$PATH:/Users/dgattey/.bin
 
 # Shortcuts to common places + apps & extensions
@@ -15,6 +14,7 @@ alias dev='cd $DEV_FOLDER'
 alias brew-prune='while true; do brew uninstall --force $(brew leaves | pick); done;' #interactively prunes unused brew packages
 alias show-files='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hide-files='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+alias rmderiveddata='rm -rfd ~/Library/Developer/Xcode/DerivedData/* && rm -rfd ~/Library/Caches/com.apple.dt.Xcode/*'
 
 # NPM help
 function npm-upgrade-all-g {
@@ -28,7 +28,6 @@ function npm-upgrade-all {
     done;
 }
 
-# Colors for prompt and ls
 export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33m\]\W\[\033[m\] $ "
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
