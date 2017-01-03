@@ -14,7 +14,20 @@ alias dev='cd $DEV_FOLDER'
 alias brew-prune='while true; do brew uninstall --force $(brew leaves | pick); done;' #interactively prunes unused brew packages
 alias show-files='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hide-files='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias rmderiveddata='rm -rfd ~/Library/Developer/Xcode/DerivedData/* && rm -rfd ~/Library/Caches/com.apple.dt.Xcode/*'
+
+# Fixing Xcode 
+function vios-reset {
+    echo -e "\033[0;36mClearing derived data\033[m" &&
+    rm -rfd ~/Library/Developer/Xcode/DerivedData/* &&
+    echo -e "\033[0;36mRemoving Xcode caches\033[m" &&
+    rm -rfd ~/Library/Caches/com.apple.dt.Xcode/* &&
+    echo -e "\033[0;36mDeleting voyager.xcworkspace\033[m" &&
+    rm -rf voyager.xcworkspace &&
+    echo -e "\033[0;33mInstalling pods\033[m" &&
+    ligradle clean podinstall &&
+    echo -e "\033[0;32mDone!\033[m" &&
+    open voyager.xcworkspace
+}
 
 # NPM help
 function npm-upgrade-all-g {
