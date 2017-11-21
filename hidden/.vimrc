@@ -21,8 +21,8 @@ colorscheme peachpuff
 
 " Have Vim jump to last position when opening a file
 if has("autocmd")
-	au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-	  \| exe "normal g'\"" | endif
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal g'\"" | endif
 endif
 
 " Sets how many lines of history VIM has to remember
@@ -94,11 +94,11 @@ set novisualbell
 set t_vb=
 set tm=500
 
-set showcmd		" Show partial command in status line
-set autowrite		" Automatically save before commands like :next and :make
-set hidden		" Hide buffers when they're abandoned
-set mouse=a		" Enable mouse usage in terminal
-set number		" Line numbers by default
+set showcmd   " Show partial command in status line
+set autowrite   " Automatically save before commands like :next and :make
+set hidden    " Hide buffers when they're abandoned
+set mouse=a   " Enable mouse usage in terminal
+set number    " Line numbers by default
 
 " enable syntax highlighting
 syntax enable

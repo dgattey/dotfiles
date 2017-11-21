@@ -14,8 +14,9 @@ alias dev='cd $DEV_FOLDER'
 alias brew-prune='while true; do brew uninstall --force $(brew leaves | pick); done;' #interactively prunes unused brew packages
 alias show-files='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hide-files='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
+alias review='git review create -guess-desc -o --no-prompt'
 
-# Fixing Xcode 
+# Fixing Xcode & basic setup
 function vios-reset {
     echo -e "\033[0;36mClearing derived data\033[m" &&
     rm -rfd ~/Library/Developer/Xcode/DerivedData/* &&
@@ -27,6 +28,19 @@ function vios-reset {
     ligradle clean podinstall &&
     echo -e "\033[0;32mDone!\033[m" &&
     open voyager.xcworkspace
+}
+
+function vios-checkout {
+    echo "TODO: USAGE needs one arg"
+    echo -e "\033[0;36mDownloading project\033[m" &&
+    mint checkout voyager-ios &&
+    echo -e "\033[0;36mRenaming project\033[m" &&
+    mv voyager-ios_trunk vios-$1 &&
+    cd vios-$1 &&
+    echo -e "\033[0;33mInstalling pods\033[m" &&
+    ligradle clean podinstall &&
+    echo -e "\033[0;32mDone!\033[m" &&
+    open voyager.xcworkspace #nohup /Applications/Xcode.app/Contents/MacOS/Xcode voyager.xcworkspace &>/dev/null &
 }
 
 # NPM help
@@ -61,5 +75,11 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 # Go configs
 export GOPATH="/Users/dgattey/.golang/"
 export PATH="$GOPATH/bin:$PATH"
+
+# Because we get something else otherwise
+export BROWSER=/Applications/Firefox.app/Contents/MacOS/firefox
+
+# CMake
+export PATH=/Applications/CMake.app/Contents/bin:$PATH
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
