@@ -7,7 +7,6 @@ cp -R ./hidden/.bin/* ~/.bin &&
 cp ./hidden/.git* ~/ &&
 cp ./hidden/.profile ~/ &&
 cp ./hidden/.vimrc ~/ &&
-source ~/.bash_profile &&
 
 echo "Beginning install of Sublime files..." &&
 mkdir -p ~/Library/Application\ Support/Sublime\ Text\ 3/Packages/User &&
@@ -20,5 +19,10 @@ cp -R ./xcode/UserData ~/Library/Developer/Xcode/ &&
 
 echo "Installing brew" &&
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &&
+brew install thefuck &&
+brew install pick &&
+brew install the_silver_searcher &&
+brew install node &&
+brew install libyaml &&
 
-echo "Done installing! Good to goooo"
+echo "Done installing! Good to goooo. All you need to do is source the bash profile"
