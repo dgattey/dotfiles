@@ -18,4 +18,7 @@ mkdir -p ~/Library/Developer/Xcode/ &&
 cp -R ./xcode/Templates/ ~/Library/Developer/Xcode/ &&
 cp -R ./xcode/UserData ~/Library/Developer/Xcode/ &&
 
+echo "Installing brew" &&
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &&
+
 echo "Done installing! Good to goooo"
