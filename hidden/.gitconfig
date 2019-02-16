@@ -1,22 +1,23 @@
 # This is Git's per-user configuration file.
 [user]
 # Please adapt and uncomment the following lines:
-    name = Dylan Gattey
-    email = dgattey@linkedin.com
+	name = Dylan Gattey
+	email = hi@dylangattey.com
 [core]
-    excludesfile = /Users/dgattey/.gitignore_global
+	excludesfile = /Users/dgattey/.gitignore_global
     attributesfile = ~/.gitattributes
     editor = vim
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [push]
     default = simple
 [credential]
     helper = osxkeychain
+	helper = !/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/jre/bin/java -Ddebug=false -Djava.net.useSystemProxies=true -jar /usr/local/Cellar/git-credential-manager/2.0.4/libexec/git-credential-manager-2.0.4.jar
 [filter "media"]
     required = true
     clean = git media clean %f
@@ -29,10 +30,12 @@
     status = auto
 [alias]
     lol = log --oneline --graph --decorate
+    dgattey = log --oneline --graph --decorate --author=dgattey
     ls = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) %C(bold blue)(%ar)%C(reset)%C(bold red)%d%C(reset) %C(white)%s%C(reset) %C(green)[%an]%C(reset)' --all
 [filter "lfs"]
     clean = git lfs clean %f
     smudge = git lfs smudge %f
     required = true
 [commit]
-    template = /Users/dgattey/.stCommitMsg
+	template = /Users/dgattey/.stCommitMsg
+	gpgsign = true

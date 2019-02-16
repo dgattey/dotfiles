@@ -14,7 +14,7 @@ alias dev='cd $DEV_FOLDER'
 alias brew-prune='while true; do brew uninstall --force $(brew leaves | pick); done;' #interactively prunes unused brew packages
 alias show-files='defaults write com.apple.finder AppleShowAllFiles YES; killall Finder /System/Library/CoreServices/Finder.app'
 alias hide-files='defaults write com.apple.finder AppleShowAllFiles NO; killall Finder /System/Library/CoreServices/Finder.app'
-alias review='git review create -guess-desc -o --no-prompt'
+alias review='git review create --guess-desc -o --no-prompt'
 
 # Fixing Xcode & basic setup
 function vios-reset {
@@ -55,7 +55,8 @@ function npm-upgrade-all {
     done;
 }
 
-export PS1="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33m\]\W\[\033[m\] $ "
+export DG_PROMPT="\[\033[36m\]\u\[\033[m\]@\[\033[32m\]\h:\[\033[33m\]\W\[\033[m\]"
+export PS1="$DG_PROMPT $ "
 export CLICOLOR=1
 export LSCOLORS=ExFxBxDxCxegedabagacad
 
@@ -76,10 +77,22 @@ if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 export GOPATH="/Users/dgattey/.golang/"
 export PATH="$GOPATH/bin:$PATH"
 
-# Because we get something else otherwise
-export BROWSER=/Applications/Firefox.app/Contents/MacOS/firefox
-
 # CMake
 export PATH=/Applications/CMake.app/Contents/bin:$PATH
+
+# Pretty git prompt
+if [ -f "$(brew --prefix)/opt/bash-git-prompt/share/gitprompt.sh" ]; then
+  __GIT_PROMPT_DIR=$(brew --prefix)/opt/bash-git-prompt/share
+  GIT_PROMPT_ONLY_IN_REPO=1
+  GIT_PROMPT_START="$DG_PROMPT"
+  GIT_PROMPT_END=""
+  GIT_PROMPT_THEME=Single_line
+  source "$(brew --prefix)/opt/bash-git-prompt/share/gitprompt.sh"
+fi
+
+# Remove duplicates in PATH:
+PATH="$(printf "%s" "${PATH}" | /usr/bin/awk -v RS=: -v ORS=: '!($0 in a) {a[$0]; print}')"
+PATH="${PATH%:}"    # remove trailing colon"
+export PATH
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
