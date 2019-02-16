@@ -5,23 +5,23 @@
 	<key>DVTConsoleDebuggerInputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleDebuggerInputTextFont</key>
-	<string>SFMono-Bold - 11.0</string>
+	<string>SFMono-Bold - 9.0</string>
 	<key>DVTConsoleDebuggerOutputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleDebuggerOutputTextFont</key>
-	<string>SFMono-Regular - 11.0</string>
+	<string>SFMono-Regular - 9.0</string>
 	<key>DVTConsoleDebuggerPromptTextColor</key>
 	<string>0.255 0.801 0.27 1</string>
 	<key>DVTConsoleDebuggerPromptTextFont</key>
-	<string>SFMono-Bold - 11.0</string>
+	<string>SFMono-Bold - 9.0</string>
 	<key>DVTConsoleExectuableInputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleExectuableInputTextFont</key>
-	<string>SFMono-Regular - 11.0</string>
+	<string>SFMono-Regular - 9.0</string>
 	<key>DVTConsoleExectuableOutputTextColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTConsoleExectuableOutputTextFont</key>
-	<string>SFMono-Bold - 11.0</string>
+	<string>SFMono-Bold - 9.0</string>
 	<key>DVTConsoleTextBackgroundColor</key>
 	<string>0 0 0 1</string>
 	<key>DVTConsoleTextInsertionPointColor</key>
@@ -30,6 +30,8 @@
 	<string>0.409 0.39 0.348175 1</string>
 	<key>DVTDebuggerInstructionPointerColor</key>
 	<string>0.420701 0.189216 0.346376 1</string>
+	<key>DVTFontSizeModifier</key>
+	<integer>-2</integer>
 	<key>DVTLineSpacing</key>
 	<real>1</real>
 	<key>DVTMarkupTextBackgroundColor</key>
@@ -37,37 +39,37 @@
 	<key>DVTMarkupTextBorderColor</key>
 	<string>0.1536 0.1536 0.1536 1</string>
 	<key>DVTMarkupTextCodeFont</key>
-	<string>SFMono-Regular - 10.0</string>
+	<string>SFMono-Regular - 8.0</string>
 	<key>DVTMarkupTextEmphasisColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTMarkupTextEmphasisFont</key>
-	<string>.AppleSystemUIFontItalic - 10.0</string>
+	<string>.AppleSystemUIFontItalic - 8.0</string>
 	<key>DVTMarkupTextInlineCodeColor</key>
 	<string>1 1 1 0.7</string>
 	<key>DVTMarkupTextLinkColor</key>
 	<string>0.255 0.392 1 1</string>
 	<key>DVTMarkupTextLinkFont</key>
-	<string>.AppleSystemUIFont - 10.0</string>
+	<string>.AppleSystemUIFont - 8.0</string>
 	<key>DVTMarkupTextNormalColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTMarkupTextNormalFont</key>
-	<string>.AppleSystemUIFont - 10.0</string>
+	<string>.AppleSystemUIFont - 8.0</string>
 	<key>DVTMarkupTextOtherHeadingColor</key>
 	<string>1 1 1 0.5</string>
 	<key>DVTMarkupTextOtherHeadingFont</key>
-	<string>.AppleSystemUIFont - 14.0</string>
+	<string>.AppleSystemUIFont - 12.0</string>
 	<key>DVTMarkupTextPrimaryHeadingColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTMarkupTextPrimaryHeadingFont</key>
-	<string>.AppleSystemUIFont - 24.0</string>
+	<string>.AppleSystemUIFont - 22.0</string>
 	<key>DVTMarkupTextSecondaryHeadingColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTMarkupTextSecondaryHeadingFont</key>
-	<string>.AppleSystemUIFont - 18.0</string>
+	<string>.AppleSystemUIFont - 16.0</string>
 	<key>DVTMarkupTextStrongColor</key>
 	<string>1 1 1 1</string>
 	<key>DVTMarkupTextStrongFont</key>
-	<string>.AppleSystemUIFontBold - 10.0</string>
+	<string>.AppleSystemUIFontBold - 8.0</string>
 	<key>DVTSourceTextBackground</key>
 	<string>0.0106585 0.0188867 0.0225361 1</string>
 	<key>DVTSourceTextBlockDimBackgroundColor</key>
