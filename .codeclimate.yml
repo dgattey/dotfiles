@@ -19,3 +19,5 @@ exclude_patterns:
   - "sublime"
   - "xcode"
   - "hidden/.bin/git-completion.bash"
+  - "hidden/.bin/Sourcery.app"
+  - "hidden/.bin/src/clock"
