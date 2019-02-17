@@ -1,0 +1,10 @@
+---
+linters:
+  rubocop:
+    fixer: true
+  shellcheck:
+    shell: bash
+  yamllint:
+    config: .yamllint.yml
+fixers:
+  enable: true

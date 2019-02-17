@@ -1,165 +1,269 @@
 #! /bin/bash
 set -e
 
-# Echo an error message before exiting
-err_report() {
-    echo "$(tput setaf 1)error on line $1$(tput sgr0)"
+# --------------------------
+# STATIC FUNCTIONS
+# --------------------------
+
+# Creates a name for a staging folder
+GET_STAGING_FOLDER() {
+    local curr_time=$(ruby -e 'puts Time.now.to_f')
+    local hash=$(echo -n "$staging_dest" | shasum | cut -c1-15)
+    local dir_name=".${hash}_temp"
+    echo $dir_name
 }
-trap 'err_report $LINENO' ERR
 
 # --------------------------
 # CONSTANTS
 # --------------------------
-ERASE="\\r\\033[K"
-HIDDEN_SOURCE=hidden
-HIDDEN_DESTINATION=~
-SUBLIME_SOURCE=sublime
-SUBLIME_DESTINATION=~/Library/Application\ Support/Sublime\ Text\ 3
-XCODE_SOURCE=xcode
-XCODE_DESTINATION=~/Library/Developer/Xcode
+REPO=repo
+FILESYSTEM=filesystem
+FLAG_REPO="$REPO"
+FLAG_FS="$FILESYSTEM"
+HIDDEN_IN_REPO=hidden
+HIDDEN_IN_FS=~
+SUBLIME_IN_REPO=sublime
+SUBLIME_IN_FS=~/Library/Application\ Support/Sublime\ Text\ 3
+XCODE_IN_REPO=xcode/UserData
+XCODE_IN_FS=~/Library/Developer/Xcode/UserData
+BASH_PROFILE=~/.bash_profile
+STAGING=$(GET_STAGING_FOLDER)
+TEMP_FILE="$STAGING/tmp"
 
 # --------------------------
-# PRINT FUNCTIONS
+# HELPER FUNCTIONS
 # --------------------------
 
-erase_line() {
-    echo -en "$ERASE"
+# Prints the usage of this script
+print_usage() {
+    local script_name=$(basename "$0")
+    echo "dotfiles <$script_name>, version $(git describe --tags --always)"
+    echo -e "Usage:\t$script_name [direction]"
+    echo -e "direction options:"
+    echo -e "\t$FLAG_REPO\tcopies from filesystem into this repo"
+    echo -e "\t$FLAG_FS\tcopies out to filesystem and installs brew + packages"
 }
 
-# Echos a simple status message in blue
-print_status_message() {
-    local message=$1
-
-    echo -e "$(tput setaf 6)$message$(tput sgr0)"
+# Sources the bash profile
+source_bash_profile() {
+    print_status_message "Sourcing profiles..."
+    source "$BASH_PROFILE" &
+    print_progress_indicator "Sourcing bash profile "
+    print_success_message "Sourced bash profile "
 }
 
-# Prints a success message with a green checkmark
-print_success_message() {
-    local message=$1
-
-    erase_line
-    echo -en "$message"
-    echo -e "$(tput setaf 2)√$(tput sgr0)"
+# Deletes and recreates the staging folder
+create_staging() {
+    delete_staging
+    mkdir -p "$STAGING"
 }
 
-# Prints a "working" message
-print_working_message() {
-    local spin='-\|/'
+# Deletes $dest, execs rm -rf on the sublime cache, and moves staging to dest
+move_staging_to() {
+    local dest="$1"
+    local user_dest="$STAGING/Packages/User"
 
-    local overall_spin_iteration=$1
-    local message=$2
-    local verification_message=$3
-
-    local spin_iteration=$((overall_spin_iteration%4))
-
-    # Special case the first few iterations to show a verification message as needed
-    if [ "$overall_spin_iteration" -lt 6 ] && [ "$verification_message" != "" ]; then
-        message="$verification_message"
+    rm -rf "$dest"
+    if [ -d "$user_dest" ]; then
+        find "$user_dest" -name "*.cache" -exec rm -rf {} +
     fi
-
-    erase_line
-    print_information_message "$message"
-    printf "%s" "${spin:$spin_iteration:1}"
+    mv "$STAGING" "$dest"
 }
 
-# Prints an informative string in yellow with given message content
-print_information_message() {
-    local message=$1
-    echo -en "$(tput setaf 3)$message$(tput sgr0)"
+# Deletes staging folder
+delete_staging() {
+    rm -rf "$STAGING"
 }
 
-# Prints an error message with a skull and crossbones to show that
-# something was impossible, with an optional progress message
-print_error_message() {
-    local message=$1
-    local progress_message=$2
-
-    erase_line
-    echo -en "$(tput setaf 1)"
-    echo -en "$message  "
-    echo -en $'\xE2\x98\xA0' # Skull and crossbones
-    print_information_message "$progress_message"
-    echo ""
-}
-
-# Prints a spinning progress indicator until the last command before this
-# is finished. It uses the message passed in to print a status message
-print_progress_indicator() {
-    local message=$1
-    local verification_message=$2
-
-    local pid=$!
-
-    # Prints a message that moves so we show progress
-    local spin_iteration=0
-    while kill -0 $pid 2>/dev/null
-    do
-      spin_iteration=$((spin_iteration+1))
-      print_working_message "$spin_iteration" "$message" "$verification_message"
-      sleep .15
-    done
-}
+# --------------------------
+# COPYING FUNCTIONS
+# --------------------------
 
 # Counts files in a directory recursively
 count_files_in() {
-    local directory=$1
+    local directory="$1"
     find $directory -type f | wc -l | xargs echo
+}
+
+# Does the bulk of the work for copying files around
+do_copy_files() {
+    local dest_desc="$1"
+    local src="$2"
+    local dest="$3"
+
+    # Figure out which place to iterate through & folder to make
+    local from
+    local to
+    if [[ "$dest_desc" = "$FILESYSTEM" ]]; then
+        from="$src"
+        to="$dest"
+    else
+        from="$dest"
+        to="$STAGING"
+    fi
+
+    # Create to folder before anything else
+    mkdir -p "$to" &
+    print_progress_indicator "Creating destination $to "
+    print_success_message "Created destination $to "
+
+    # Iterate over from folder
+    for file in "$from"/*; do
+        local filename
+        filename=$(basename "$file")
+
+        # If DS_STORE, move on
+        if [[ "$filename" == ".DS_Store" ]]; then
+            continue
+        fi
+
+        # Copy file
+        if [[ "$dest_desc" = "$FILESYSTEM" ]]; then
+            # For a to filesystem copy, just blindly copy the file out recursively
+            cp -R "$file" "$dest/" &
+        else
+            # For a to repo copy, copy src/filename to staging
+            cp -R "$src/$filename" "$STAGING/" &
+        fi
+
+        print_progress_indicator "Copying $filename $suffix "
+        print_success_message "Copied $filename "
+    done
 }
 
 # Copies all files in a src to dest, printing some statuses along the way
 copy_files() {
-    local type=$1
-    local src=$2
-    local dest=$3
-    local number_of_files=$(count_files_in "$src")
+    local type="$1" # Type of files
+    local src="$2" # Source folder
+    local dest="$3" # Destination folder
+    local dest_desc="$4" # Describes destination ("repo"/"filesystem"/etc)    
+    local suffix="to $dest_desc"
 
-    print_status_message "Copying $type files..."
+    print_status_message "Copying $type files $suffix..."
 
-    # Create dest before anything else
-    mkdir -p "$dest" &
-    print_progress_indicator "Creating $dest "
-    print_success_message "Created $dest "
-
-    # Loop through all files including hidden ones
     local file
-    for file in "$src"/*; do
-        # If DS_STORE, move on
-        if [[ "$file" = "$src/.DS_Store" ]]; then
-            continue
-        fi
+    local number_of_files
+    
+    if [[ "$dest_desc" = "$FILESYSTEM" ]]; then
+        do_copy_files "$dest_desc" "$src" "$dest"
 
-        # If directory, make the corresponding folder in destination
-        if [ -d ${file} ]; then
-            mkdir -p "$dest/$file" &
-            print_progress_indicator "Making directory $dest/$file "
-        fi
+        # Show how many we copied
+        number_of_files=$(count_files_in "$src")
+        print_success_message "Copied all $number_of_files $type files $suffix "
+    else
+        do_copy_files "$dest_desc" "$src" "$dest"
 
-        # Copy the file and show success when done
-        cp -R "$file" "$dest/" &
-        print_progress_indicator "Copying $file "
-        print_success_message "Copied $file "
-    done
+        # Now that we've copied over all files to staging, let's delete the dest,
+        # then move staging to dest after deleting Sublime caches
+        move_staging_to "$dest" &
+        print_progress_indicator "Moving files to $dest/ "
+        number_of_files=$(count_files_in "$dest")
+        print_success_message "Copied all $number_of_files $type files $suffix "
+    fi
+}
 
-    # Show how many we copied
-    print_success_message "Copied all $number_of_files $type files "
+# Copies files in a certain direction (either "repo" or "filesystem")
+copy_files_in_direction() {
+    local type="$1"
+    local repo_src="$2"
+    local fs_src="$3"
+    local dest_direction="$4"
+
+    # Copy based on the destination direction
+    if [[ "$dest_direction" = "$REPO" ]]; then
+        copy_files "$type" "$fs_src" "$repo_src" "$dest_direction"
+    elif [[ "$dest_direction" = "$FILESYSTEM" ]]; then
+        copy_files "$type" "$repo_src" "$fs_src" "$dest_direction"
+    fi
+}
+
+# --------------------------
+# BREW FUNCTIONS
+# --------------------------
+
+# Checks for brew, and either installs it or updates it
+setup_brew() {
+    local package="brew"
+
+    # Check
+    command -v "$package" > "$TEMP_FILE" &
+    print_progress_indicator "Checking for $package "
+    erase_line
+
+    # Do something
+    if [[ -z $(head -n 1 "$TEMP_FILE") ]] ; then
+        # Install brew
+        print_status_message "Installing brew..."
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" >"$TEMP_FILE" &
+        print_progress_indicator "Downloading and installing brew "
+        print_success_message "Successfully installed brew "
+        cat "$TEMP_FILE"
+    else
+        # Update brew
+        print_status_message "Updating brew..."
+        brew update >"$TEMP_FILE" &
+        print_progress_indicator "Downloading brew packages "
+        print_success_message "Successfully updated brew "
+        cat "$TEMP_FILE"
+    fi
+}
+
+# Installs all the packages!
+install_packages() {
+    print_status_message "Installing packages..."
+    install_package "command -v fuck" "thefuck"
+    install_package "command -v pick" "pick"
+    install_package "command -v ag" "the_silver_searcher"
+    install_package "command -v node" "node"
+    install_package "brew ls --versions libyaml" "libyaml"
+}
+
+# Installs a single package by checking a command and installing it if missing
+install_package() {
+    local check_command="$1"
+    local package_name="$2"
+
+    # Note: this is intentionally not escaped so we can execute it
+    $check_command > "$TEMP_FILE" &
+    print_progress_indicator "Checking for $package_name "
+
+    # Install package if missing (no output)
+    if [[ -z $(head -n 1 "$TEMP_FILE") ]]; then
+        brew install "$package_name" > "$TEMP_FILE" &
+        print_progress_indicator "Installing $package_name "
+        print_success_message "$package_name installed "
+        cat "$TEMP_FILE"
+    else
+        print_success_message "$package_name already installed "
+    fi
 }
 
 # --------------------------
 # MAIN
 # --------------------------
-shopt -s dotglob # Enables seeing hidden files when iterating over a directory
-copy_files "hidden" "$HIDDEN_SOURCE" "$HIDDEN_DESTINATION"
-copy_files "Sublime Package" "$SUBLIME_SOURCE" "$SUBLIME_DESTINATION"
-copy_files "Xcode" "$XCODE_SOURCE" "$XCODE_DESTINATION"
+source print.sh
+destination=$1
 
-exit 1
+# Print usage and exit if not one of the supported directions
+if [[ "$destination" != "$FILESYSTEM" && "$destination" != "$REPO" ]]; then
+    # Print usage and exit
+    print_usage
+    exit 1
+fi
 
-echo "Installing brew" &&
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" &&
-brew install thefuck &&
-brew install pick &&
-brew install the_silver_searcher &&
-brew install node &&
-brew install libyaml &&
+# Copy all files to destination
+copy_files_in_direction "hidden" "$HIDDEN_IN_REPO" "$HIDDEN_IN_FS" "$destination"
+copy_files_in_direction "Sublime Package" "$SUBLIME_IN_REPO" "$SUBLIME_IN_FS" "$destination"
+copy_files_in_direction "Xcode" "$XCODE_IN_REPO" "$XCODE_IN_FS" "$destination"
 
-echo "Done installing! Good to goooo. All you need to do is source the bash profile"
+# If we're going out to filesystem, let's install the brew packages too
+if [[ "$destination" == "$FILESYSTEM" ]]; then
+    create_staging
+    setup_brew
+    install_packages
+    source_bash_profile
+fi
+
+# Cleanup - delete the staging folder and print a finished message
+delete_staging
+print_status_message "Finished installing to $destination! "
