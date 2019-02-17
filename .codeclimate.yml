@@ -18,3 +18,4 @@ plugins:
 exclude_patterns:
   - "sublime"
   - "xcode"
+  - "hidden/.bin/git-completion.bash"
