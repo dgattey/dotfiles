@@ -6,6 +6,8 @@ set -e
 # --------------------------
 REPO=repo
 FILESYSTEM=filesystem
+FLAG_REPO="--to-repo"
+FLAG_FS="--to-fs"
 HIDDEN_IN_REPO=hidden
 HIDDEN_IN_FS=~
 SUBLIME_IN_REPO=sublime
@@ -25,10 +27,10 @@ count_files_in() {
 
 # Copies all files in a src to dest, printing some statuses along the way
 copy_files() {
-    local type=$1 # Type of files
-    local src=$2 # Source folder
+    local type="$1" # Type of files
+    local src="$2" # Source folder
     local dest="$3" # Destination folder
-    local dest_desc=$4 # Describes destination ("repo"/"filesystem"/etc)
+    local dest_desc="$4" # Describes destination ("repo"/"filesystem"/etc)
     
     local number_of_files=$(count_files_in "$src")
     local suffix="to $dest_desc"
@@ -63,10 +65,10 @@ copy_files() {
 
 # Copies files in a certain direction (either "repo" or "filesystem")
 copy_files_in_direction() {
-    local type=$1
-    local repo_src=$2
-    local fs_src=$3
-    local dest_direction=$4
+    local type="$1"
+    local repo_src="$2"
+    local fs_src="$3"
+    local dest_direction="$4"
 
     # Copy based on the destination direction
     if [[ "$dest_direction" = "$REPO" ]]; then
@@ -80,9 +82,30 @@ copy_files_in_direction() {
 # MAIN
 # --------------------------
 source print.sh
-copy_files_in_direction "hidden" "$HIDDEN_IN_REPO" "$HIDDEN_IN_FS" "$FILESYSTEM"
-copy_files_in_direction "Sublime Packages" "$SUBLIME_IN_REPO" "$SUBLIME_IN_FS" "$FILESYSTEM"
-copy_files_in_direction "Xcode" "$XCODE_IN_REPO" "$XCODE_IN_FS" "$FILESYSTEM"
+flag=$1
+direction=""
+
+# Parse the flags
+if [[ "$flag" = "$FLAG_FS" ]]; then
+    # Copy files from repo to filesystem
+    direction="$FILESYSTEM"
+elif [[ "$flag" = "$FLAG_REPO" ]]; then
+    # Copy files from filesystem to repo
+    direction="$REPO"
+else
+    # Print usage and exit
+    echo "dotfiles <install.sh>, version $(git describe --tags --always)"
+    echo -e "Usage:\tinstall.sh [direction]"
+    echo -e "direction options:"
+    echo -e "\t$FLAG_REPO\t(copies from filesystem into this repo)"
+    echo -e "\t$FLAG_FS\t\t(copies from repo out to filesystem)"
+    exit 1
+fi
+
+# Copy all files
+copy_files_in_direction "hidden" "$HIDDEN_IN_REPO" "$HIDDEN_IN_FS" "$direction"
+copy_files_in_direction "Sublime Packages" "$SUBLIME_IN_REPO" "$SUBLIME_IN_FS" "$direction"
+copy_files_in_direction "Xcode" "$XCODE_IN_REPO" "$XCODE_IN_FS" "$direction"
 
 exit 1
 
