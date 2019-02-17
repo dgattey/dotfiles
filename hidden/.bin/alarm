@@ -1,4 +1,4 @@
 #! /bin/bash
 
-javac ./src/clock/src/clock/*.java -d ./src/clock/bin
-java -cp ./src/clock/bin clock.Alarm $@
+javac ~/.bin/src/clock/src/clock/*.java -d ~/.bin/src/clock/bin
+java -cp ~/.bin/src/clock/bin clock.Alarm $@
