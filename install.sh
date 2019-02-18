@@ -36,11 +36,16 @@ TEMP_FILE="$STAGING/tmp"
 # HELPER FUNCTIONS
 # --------------------------
 
-# Prints the usage of this script
-print_usage() {
+# Prints what this script is
+print_script_status() {
     local script_name
     script_name=$(basename "$0")
     echo "dotfiles <$script_name>, version $(git describe --tags --always)"
+}
+
+# Prints the usage of this script
+print_usage() {
+    print_script_status
     echo -e "Usage:\t$script_name [direction]"
     echo -e "direction options:"
     echo -e "\t$FLAG_REPO\tcopies from filesystem into this repo"
@@ -253,6 +258,9 @@ if [[ "$destination" != "$FILESYSTEM" && "$destination" != "$REPO" ]]; then
     # Print usage and exit
     print_usage
     exit 1
+else
+    # Prints a little status at the top of the script!
+    print_script_status
 fi
 
 # Copy all files to destination
