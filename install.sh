@@ -225,6 +225,9 @@ install_packages() {
     install_package "command -v ag" "the_silver_searcher"
     install_package "command -v node" "node"
     install_package "brew ls --versions libyaml" "libyaml"
+    install_package "brew ls --versions bash-git-prompt" "bash-git-prompt"
+    install_package "command -v go" "go"
+    install_package "brew ls --versiona chisel" "chisel"
 }
 
 # Installs a single package by checking a command and installing it if missing
