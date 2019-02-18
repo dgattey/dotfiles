@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SearchScopes
+   version = "1.1">
+   <Scope
+      name = "Code"
+      predicate = "uti == &quot;public.source-code&quot; AND location_workspace == &quot;&quot; AND name.pathExtension == &quot;swift&quot;"
+      uuid = "9DFA9F96-0D9B-4156-8852-64200B8C4E88">
+   </Scope>
+   <Scope
+      name = "Swift Messenger"
+      predicate = "location_filesystem == &quot;/Users/dgattey/Documents/voyager-ios_trunk/VoyagerMessaging&quot; AND name.pathExtension == &quot;swift&quot; AND name != &quot;Test&quot;"
+      uuid = "EA35BF76-3C84-4DDD-878D-DBCD913A3286">
+   </Scope>
+   <Scope
+      name = "Localizable"
+      predicate = "name.pathExtension == &quot;strings&quot; AND path CONTAINS &quot;en.lproj&quot; AND name CONTAINS &quot;Localizable&quot;"
+      uuid = "25B1A665-539B-47D8-B495-48AD8DB513CB">
+   </Scope>
+   <Scope
+      name = "VoyagerMessaging"
+      predicate = "location_filesystem == &quot;/Users/dgattey/Documents/vios-working/VoyagerMessaging&quot; AND location_filesystem == &quot;/Users/dgattey/Documents/vios-working/VoyagerMessagingCore&quot;"
+      uuid = "770ABC9B-1F7C-4676-8FAC-502F5649F399">
+   </Scope>
+   <Scope
+      name = "My Scope"
+      predicate = "location_workspace == &quot;&quot;"
+      uuid = "A0F8BD77-427D-44DA-B49A-968F23C35E63">
+   </Scope>
+</SearchScopes>

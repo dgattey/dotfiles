@@ -32,6 +32,9 @@
     lol = log --oneline --graph --decorate
     dgattey = log --oneline --graph --decorate --author=dgattey
     ls = log --graph --abbrev-commit --decorate --date=relative --format=format:'%C(yellow)%h%C(reset) %C(bold blue)(%ar)%C(reset)%C(bold red)%d%C(reset) %C(white)%s%C(reset) %C(green)[%an]%C(reset)' --all
+    go = checkout -b
+    pr = "!git add -A && git commit && git push --set-upstream origin \"$(git rev-parse --abbrev-ref HEAD)\""
+    prune-branches = !git remote prune origin && git branch -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D
 [filter "lfs"]
     clean = git lfs clean %f
     smudge = git lfs smudge %f

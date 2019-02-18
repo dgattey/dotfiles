@@ -7,10 +7,12 @@ set -e
 
 # Creates a name for a staging folder
 GET_STAGING_FOLDER() {
-    local curr_time=$(ruby -e 'puts Time.now.to_f')
-    local hash=$(echo -n "$staging_dest" | shasum | cut -c1-15)
+    local curr_time
+    local hash
+    curr_time=$(ruby -e 'puts Time.now.to_f')
+    hash=$(echo -n "$curr_time" | shasum | cut -c1-20)
     local dir_name=".${hash}_temp"
-    echo $dir_name
+    echo "$dir_name"
 }
 
 # --------------------------
@@ -36,7 +38,8 @@ TEMP_FILE="$STAGING/tmp"
 
 # Prints the usage of this script
 print_usage() {
-    local script_name=$(basename "$0")
+    local script_name
+    script_name=$(basename "$0")
     echo "dotfiles <$script_name>, version $(git describe --tags --always)"
     echo -e "Usage:\t$script_name [direction]"
     echo -e "direction options:"
@@ -47,6 +50,7 @@ print_usage() {
 # Sources the bash profile
 source_bash_profile() {
     print_status_message "Sourcing profiles..."
+    # shellcheck source=/dev/null
     source "$BASH_PROFILE" &
     print_progress_indicator "Sourcing bash profile "
     print_success_message "Sourced bash profile "
@@ -82,7 +86,7 @@ delete_staging() {
 # Counts files in a directory recursively
 count_files_in() {
     local directory="$1"
-    find $directory -type f | wc -l | xargs echo
+    find "$directory" -type f | wc -l | xargs echo
 }
 
 # Does the bulk of the work for copying files around
