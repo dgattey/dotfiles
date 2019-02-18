@@ -2,7 +2,8 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Dylan Gattey
-	email = hi@dylangattey.com
+	email = dgattey@linkedin.com
+	signingKey = 5FFB96A3FC14D1059ABDA03D5EB68D3DECED52CD
 [core]
 	excludesfile = /Users/dgattey/.gitignore_global
     attributesfile = ~/.gitattributes
@@ -16,8 +17,8 @@
 [push]
     default = simple
 [credential]
+	helper = !java -Ddebug=false -Djava.net.useSystemProxies=true -jar /usr/local/Cellar/git-credential-manager/2.0.4/libexec/git-credential-manager-2.0.4.jar
     helper = osxkeychain
-	helper = !/Library/Java/JavaVirtualMachines/jdk1.8.0_202.jdk/Contents/Home/jre/bin/java -Ddebug=false -Djava.net.useSystemProxies=true -jar /usr/local/Cellar/git-credential-manager/2.0.4/libexec/git-credential-manager-2.0.4.jar
 [filter "media"]
     required = true
     clean = git media clean %f
@@ -41,4 +42,4 @@
     required = true
 [commit]
 	template = /Users/dgattey/.stCommitMsg
-	gpgsign = true
+	gpgSign = true
