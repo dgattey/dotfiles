@@ -2,7 +2,7 @@
 # This file serves just as a link
 set -e
 
-location=$(dirname "$BASH_SOURCE")
+location=$(dirname "${BASH_SOURCE[0]}")
 cd "$location"
 parent_path=$(pwd -P)
 
