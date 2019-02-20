@@ -29,6 +29,7 @@ SUBLIME_IN_FS=~/Library/Application\ Support/Sublime\ Text\ 3
 XCODE_IN_REPO=xcode/UserData
 XCODE_IN_FS=~/Library/Developer/Xcode/UserData
 BASH_PROFILE=~/.bash_profile
+PROFILE=~/.profile
 STAGING=$(GET_STAGING_FOLDER)
 TEMP_FILE="$STAGING/tmp"
 
@@ -52,13 +53,17 @@ print_usage() {
     echo -e "\t$FLAG_FS\tcopies out to filesystem and installs brew + packages"
 }
 
-# Sources the bash profile
-source_bash_profile() {
+# Sources the bash profile & other profiles
+source_profiles() {
     print_status_message "Sourcing profiles..."
     # shellcheck source=/dev/null
-    source "$BASH_PROFILE" &
+    . "$BASH_PROFILE" &
     print_progress_indicator "Sourcing bash profile "
     print_success_message "Sourced bash profile "
+    # shellcheck source=/dev/null
+    . "$PROFILE" &
+    print_progress_indicator "Sourcing main profile "
+    print_success_message "Sourced main profile "
 }
 
 # Deletes and recreates the staging folder
@@ -217,6 +222,31 @@ setup_brew() {
     fi
 }
 
+# Checks for rvm, and either installs it or updates it
+setup_rvm() {
+    local package="rvm"
+
+    # Prints status
+    print_status_message "Checking for rvm..."
+
+    # Check
+    command -v "$package" > "$TEMP_FILE" &
+    print_progress_indicator "Checking for $package "
+    erase_line
+
+    # Do something
+    if [[ -z $(head -n 1 "$TEMP_FILE") ]] ; then
+        # Install brew
+        curl -sSL "https://get.rvm.io" | bash -s "stable" --ruby >"$TEMP_FILE" &
+        print_progress_indicator "Downloading and installing rvm "
+        print_success_message "Successfully installed rvm "
+        cat "$TEMP_FILE"
+    else
+        # print success
+        print_success_message "rvm already installed "
+    fi
+}
+
 # Installs all the packages!
 install_packages() {
     print_status_message "Installing packages..."
@@ -227,7 +257,7 @@ install_packages() {
     install_package "brew ls --versions libyaml" "libyaml"
     install_package "brew ls --versions bash-git-prompt" "bash-git-prompt"
     install_package "command -v go" "go"
-    install_package "brew ls --versiona chisel" "chisel"
+    install_package "brew ls --version chisel" "chisel"
 }
 
 # Installs a single package by checking a command and installing it if missing
@@ -276,7 +306,8 @@ if [[ "$destination" == "$FILESYSTEM" ]]; then
     create_staging
     setup_brew
     install_packages
-    source_bash_profile
+    setup_rvm
+    source_profiles
 fi
 
 # Cleanup - delete the staging folder and print a finished message
