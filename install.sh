@@ -227,7 +227,7 @@ install_packages() {
     install_package "brew ls --versions libyaml" "libyaml"
     install_package "brew ls --versions bash-git-prompt" "bash-git-prompt"
     install_package "command -v go" "go"
-    install_package "brew ls --versiona chisel" "chisel"
+    install_package "brew ls --version chisel" "chisel"
 }
 
 # Installs a single package by checking a command and installing it if missing
