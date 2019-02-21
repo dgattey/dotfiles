@@ -259,7 +259,6 @@ install_packages() {
     install_package "command -v go" "go"
     install_package "brew ls --version chisel" "chisel"
     install_package "brew ls --versions git-credential-manager" "git-credential-manager"
-    install_package "command -v gpg" "gnupg"
 }
 
 # Installs a single package by checking a command and installing it if missing

@@ -3,7 +3,7 @@
 # Please adapt and uncomment the following lines:
 	name = Dylan Gattey
 	email = dgattey@linkedin.com
-	signingKey = 5FFB96A3FC14D1059ABDA03D5EB68D3DECED52CD
+	signingKey = 10B62A63CAA064C41091471B86769BCAF264E198
 [core]
 	excludesfile = /Users/dgattey/.gitignore_global
     attributesfile = ~/.gitattributes
