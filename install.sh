@@ -257,7 +257,7 @@ install_packages() {
     install_package "brew ls --versions libyaml" "libyaml"
     install_package "brew ls --versions bash-git-prompt" "bash-git-prompt"
     install_package "command -v go" "go"
-    install_package "brew ls --version chisel" "chisel"
+    install_package "brew ls --versions chisel" "chisel"
     install_package "brew ls --versions git-credential-manager" "git-credential-manager"
 }
 
