@@ -10,7 +10,8 @@ trap 'err_report $LINENO' ERR
 # --------------------------
 # CONSTANTS
 # --------------------------
-ERASE="\\r\\033[K"
+BEGINNING_OF_LINE="\\r"
+ERASE="$BEGINNING_OF_LINE\\033[K"
 
 # --------------------------
 # PRINT FUNCTIONS
@@ -18,6 +19,10 @@ ERASE="\\r\\033[K"
 
 erase_line() {
     echo -en "$ERASE"
+}
+
+reset_cursor() {
+    echo -en "$BEGINNING_OF_LINE"
 }
 
 # Echos a simple status message in blue
@@ -54,6 +59,7 @@ print_working_message() {
     erase_line
     print_information_message "$message"
     printf "%s" "${spin:$spin_iteration:1}"
+    reset_cursor
 }
 
 # Prints an informative string in yellow with given message content
