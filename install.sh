@@ -259,6 +259,16 @@ install_packages() {
     install_package "command -v go" "go"
     install_package "brew ls --versions chisel" "chisel"
     install_package "brew ls --versions git-credential-manager" "git-credential-manager"
+
+    # Quicklook packages
+    install_package "ls ~/QuickLook/ProvisionQL.qlgenerator" "brew cask install provisionql"
+    install_package "ls ~/QuickLook/QLColorCode.qlgenerator" "brew cask install qlcolorcode"
+    install_package "ls ~/QuickLook/QLStephen.qlgenerator" "brew cask install qlstephen"
+    install_package "ls ~/QuickLook/QLMarkdown.qlgenerator" "brew cask install qlmarkdown"
+    install_package "ls ~/QuickLook/QuickLookJSON.qlgenerator" "brew cask install quicklook-json"
+    install_package "ls ~/QuickLook/WebP.qlgenerator" "brew cask install webpquicklook"
+    install_package "ls ~/QuickLook/QuickLookASE.qlgenerator" "brew cask install quicklookase"
+    install_package "brew ls --versions betterzip" "brew cask install betterzip"
 }
 
 # Installs a single package by checking a command and installing it if missing
